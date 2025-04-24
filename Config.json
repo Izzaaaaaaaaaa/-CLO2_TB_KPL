@@ -1,0 +1,76 @@
+{
+  "bioskop": {
+    "nama": "CinemaX XXI",
+    "lokasi": "Jl. Soekarno-Hatta No.123, Purwokerto",
+    "jam_operasional": "09:00 - 22:00"
+  },
+  "tiket": {
+    "DISKON_LIBUR": 10,
+    "DISKON_MEMBER": 5,
+    "HARGA_ADMIN": 2500,
+    "WAKTU_DISKON": {
+      "pagi": 5,
+      "siang": 0,
+      "malam": 10
+    }
+  },
+  "teater": {
+    "jumlah_teater": 3,
+    "tipe_teater": {
+      "Teater 1": "2D",
+      "Teater 2": "3D",
+      "Teater 3": "Premiere"
+    },
+    "MAX_KURSI": 100
+  },
+  "kontak": {
+    "email": "support@cinemaxxii.com",
+    "telepon": "+62-811-1234-567"
+  },
+  "film": [
+    {
+      "judul": "Avengers: Endgame",
+      "genre": "Action, Adventure, Drama",
+      "durasi": "181 menit",
+      "rating": "PG-13",
+      "teater": "Teater 1",
+      "jadwal": [
+        "10:00", "13:00", "16:00", "19:00"
+      ],
+      "harga_tiket": 50000
+    },
+    {
+      "judul": "Spider-Man: No Way Home",
+      "genre": "Action, Adventure, Sci-Fi",
+      "durasi": "148 menit",
+      "rating": "PG-13",
+      "teater": "Teater 2",
+      "jadwal": [
+        "11:00", "14:00", "17:00", "20:00"
+      ],
+      "harga_tiket": 60000
+    },
+    {
+      "judul": "The Lion King",
+      "genre": "Animation, Adventure, Drama",
+      "durasi": "118 menit",
+      "rating": "PG",
+      "teater": "Teater 1",
+      "jadwal": [
+        "09:30", "12:30", "15:30", "18:30"
+      ],
+      "harga_tiket": 45000
+    },
+    {
+      "judul": "F9: The Fast Saga",
+      "genre": "Action, Crime, Thriller",
+      "durasi": "143 menit",
+      "rating": "PG-13",
+      "teater": "Teater 3",
+      "jadwal": [
+        "10:30", "13:30", "16:30", "19:30"
+      ],
+      "harga_tiket": 55000
+    }
+  ]
+}
