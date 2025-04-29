@@ -151,7 +151,7 @@ class FilmService:
 
 
 # Contoh penggunaan mandiri
-if _name_ == '_main_':
+if __name__ == '__main__':
     config = ConfigManager()
     config.load_config()
     film_service = FilmService(config)
