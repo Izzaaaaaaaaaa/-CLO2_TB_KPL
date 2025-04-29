@@ -9,7 +9,7 @@ class FilmService:
     Mengimplementasikan Code Reuse dengan memanfaatkan ConfigManager.
     """
 
-    def _init_(self, config_manager: ConfigManager):
+    def __init__(self, config_manager: ConfigManager):
         """
         Inisialisasi FilmService dengan ConfigManager
         

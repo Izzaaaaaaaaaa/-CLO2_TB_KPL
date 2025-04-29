@@ -4,7 +4,7 @@
 # File: validation/ticket_validator.py
 
 from typing import Dict, List, Optional
-from config.config_manager import ConfigManager
+from Config.Config_manager import ConfigManager
 
 
 class TicketValidator:
