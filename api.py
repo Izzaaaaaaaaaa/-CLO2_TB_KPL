@@ -222,5 +222,5 @@ def reserve_seats(reservation: SeatReservation):
 
 
 # Menjalankan aplikasi dengan Uvicorn jika file ini dijalankan langsung
-if _name_ == "_main_":
+if __name__ == "_main_":
     uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)
