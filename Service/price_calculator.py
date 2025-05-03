@@ -67,12 +67,12 @@ class PriceCalculator:
 
         Args:
             film_title: Judul film
-            jam_tayang: Jam tayang film (format: "HH:MM")
-            is_holiday: True jika hari libur, False jika tidak
-            is_member: True jika pengguna adalah member, False jika tidak
+            jam_tayang: Jam tayang
+            is_holiday: Apakah hari libur
+            is_member: Apakah member
 
         Returns:
-            Dictionary berisi rincian harga dan total
+            Dictionary berisi informasi harga
         """
         # Mendapatkan harga dasar
         base_price = self.get_base_price(film_title)
@@ -116,7 +116,9 @@ class PriceCalculator:
             "total_diskon": total_diskon,
             "harga_setelah_diskon": price_after_discount,
             "biaya_admin": self.biaya_admin,
-            "total_harga": total_price
+            "total_harga": total_price,
+            # Tambahkan kunci "total" untuk kompatibilitas dengan API
+            "total": total_price
         }
 
         return result
@@ -140,6 +142,7 @@ if __name__ == '__main__':
     print(f"Total diskon: Rp {normal_price['total_diskon']}")
     print(f"Biaya admin: Rp {normal_price['biaya_admin']}")
     print(f"Total harga: Rp {normal_price['total_harga']}")
+    print(f"Total (API): Rp {normal_price['total']}")
 
     # Harga dengan semua diskon (hari libur dan member)
     all_discount_price = calculator.get_price(film_title, jam_tayang, True, True)
@@ -154,3 +157,4 @@ if __name__ == '__main__':
     print(f"Total diskon: Rp {all_discount_price['total_diskon']}")
     print(f"Biaya admin: Rp {all_discount_price['biaya_admin']}")
     print(f"Total harga: Rp {all_discount_price['total_harga']}")
+    print(f"Total (API): Rp {all_discount_price['total']}")
