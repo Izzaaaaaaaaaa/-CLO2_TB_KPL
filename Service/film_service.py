@@ -1,8 +1,3 @@
-# ======================================
-# AutoTicket CLI Project
-# ======================================
-# File: film_service.py
-
 import requests
 from typing import Dict, List, Optional, Any
 from Config.Config_manager import ConfigManager
@@ -14,7 +9,7 @@ class FilmService:
     Mengimplementasikan Code Reuse dengan memanfaatkan ConfigManager.
     """
 
-    def _init_(self, config_manager: ConfigManager):
+    def __init__(self, config_manager: ConfigManager):
         """
         Inisialisasi FilmService dengan ConfigManager
 
@@ -25,118 +20,159 @@ class FilmService:
         self.films = []
         self.load_film_data()
 
-    def load_film_data(self) -> None:
+    def load_film_data(self) -> List[Dict[str, Any]]:
         """
-        Memuat data film dari konfigurasi
-        """
-        self.films = self.config_manager.config.get("film", [])
-
-    def get_all_films(self) -> List[Dict[str, Any]]:
-        """
-        Mendapatkan daftar semua film yang tersedia
+        Memuat data film dari konfigurasi.
+        Menggunakan Code Reuse dengan memanfaatkan ConfigManager.
 
         Returns:
-            List berisi informasi semua film
+            List data film yang telah dimuat
         """
-        film_list = []
-        for film in self.films:
-            film_list.append({
-                "judul": film.get("judul", ""),
-                "genre": film.get("genre", ""),
-                "durasi": film.get("durasi", 0),
-                "sinopsis": film.get("sinopsis", ""),
-                "teater": film.get("teater", "")
-            })
-        return film_list
+        # Menggunakan config_manager untuk mendapatkan data film
+        self.films = self.config_manager.config.get("film", [])
+        return self.films
 
-    def get_film_info(self, title: str) -> Optional[Dict[str, Any]]:
+    def get_film_info(self, film_title: str) -> Optional[Dict[str, Any]]:
         """
-        Mendapatkan informasi detail tentang film berdasarkan judul
+        Mendapatkan informasi lengkap tentang film berdasarkan judul.
 
         Args:
-            title: Judul film yang dicari
+            film_title: Judul film yang ingin dicari
 
         Returns:
             Dictionary berisi informasi film, atau None jika tidak ditemukan
         """
+        # Mencari film berdasarkan judul
         for film in self.films:
-            if film.get("judul", "").lower() == title.lower():
-                return {
-                    "judul": film.get("judul", ""),
-                    "genre": film.get("genre", ""),
-                    "durasi": film.get("durasi", 0),
-                    "sinopsis": film.get("sinopsis", ""),
-                    "teater": film.get("teater", ""),
-                    "harga_tiket": film.get("harga_tiket", 0),
-                    "jadwal": film.get("jadwal", [])
-                }
+            if film.get("judul", "").lower() == film_title.lower():
+                return film
         return None
 
-    def get_film_showtimes(self, title: str) -> List[str]:
+    def get_film_schedule(self, film_title: str) -> List[str]:
         """
-        Mendapatkan jadwal tayang untuk film tertentu
+        Mendapatkan jadwal tayang untuk film tertentu.
 
         Args:
-            title: Judul film
+            film_title: Judul film yang ingin dicari jadwalnya
 
         Returns:
-            List berisi jadwal tayang film
+            List jadwal tayang film, atau list kosong jika film tidak ditemukan
         """
-        film_info = self.get_film_info(title)
+        film_info = self.get_film_info(film_title)
         if film_info:
             return film_info.get("jadwal", [])
         return []
 
-    def get_film_teater(self, title: str) -> Optional[str]:
+    def get_all_films(self) -> List[Dict[str, Any]]:
         """
-        Mendapatkan teater untuk film tertentu
-
-        Args:
-            title: Judul film
+        Mendapatkan daftar semua film yang tersedia.
 
         Returns:
-            Nama teater, atau None jika film tidak ditemukan
+            List semua data film
         """
-        film_info = self.get_film_info(title)
-        if film_info:
-            return film_info.get("teater", "")
-        return None
+        return self.films
 
-    def get_film_price(self, title: str) -> int:
+    def get_film_by_genre(self, genre: str) -> List[Dict[str, Any]]:
         """
-        Mendapatkan harga dasar tiket untuk film tertentu
+        Mendapatkan daftar film berdasarkan genre.
 
         Args:
-            title: Judul film
+            genre: Genre film yang ingin dicari
 
         Returns:
-            Harga dasar tiket film
+            List film yang memiliki genre yang dicari
         """
-        film_info = self.get_film_info(title)
+        result = []
+        for film in self.films:
+            film_genres = film.get("genre", "").lower()
+            if genre.lower() in film_genres:
+                result.append(film)
+        return result
+
+    def get_film_price(self, film_title: str) -> int:
+        """
+        Mendapatkan harga tiket untuk film tertentu.
+
+        Args:
+            film_title: Judul film
+
+        Returns:
+            Harga tiket film, atau 0 jika film tidak ditemukan
+        """
+        film_info = self.get_film_info(film_title)
         if film_info:
             return film_info.get("harga_tiket", 0)
         return 0
 
+    def get_film_teater(self, film_title: str) -> str:
+        """
+        Mendapatkan teater untuk film tertentu.
+
+        Args:
+            film_title: Judul film
+
+        Returns:
+            Nama teater, atau string kosong jika film tidak ditemukan
+        """
+        film_info = self.get_film_info(film_title)
+        if film_info:
+            return film_info.get("teater", "")
+        return ""
+
+    def get_films_by_teater(self, teater_name: str) -> List[Dict[str, Any]]:
+        """
+        Mendapatkan daftar film yang diputar di teater tertentu.
+
+        Args:
+            teater_name: Nama teater
+
+        Returns:
+            List film yang diputar di teater tersebut
+        """
+        result = []
+        for film in self.films:
+            if film.get("teater", "") == teater_name:
+                result.append(film)
+        return result
+
+    def is_film_available_at_time(self, film_title: str, time: str) -> bool:
+        """
+        Mengecek apakah film tersedia pada waktu tertentu.
+
+        Args:
+            film_title: Judul film
+            time: Waktu yang ingin dicek (format: "HH:MM")
+
+        Returns:
+            True jika film tersedia pada waktu tersebut, False jika tidak
+        """
+        schedule = self.get_film_schedule(film_title)
+        return time in schedule
+
 
 # Contoh penggunaan mandiri
-if _name_ == '_main_':
+if __name__ == '__main__':
     config = ConfigManager()
     config.load_config()
     film_service = FilmService(config)
 
-    # Mendapatkan semua film
-    all_films = film_service.get_all_films()
+    # Menampilkan semua film
     print("Daftar Film:")
-    for film in all_films:
-        print(f"- {film['judul']} ({film['genre']}, {film['durasi']} menit)")
+    for film in film_service.get_all_films():
+        print(f"- {film.get('judul')}")
 
-    # Mendapatkan info film tertentu
-    film_info = film_service.get_film_info("Avengers: Endgame")
+    # Mencari informasi film tertentu
+    film_title = "Avengers: Endgame"
+    film_info = film_service.get_film_info(film_title)
     if film_info:
-        print(f"\nDetail Film: {film_info['judul']}")
-        print(f"Genre: {film_info['genre']}")
-        print(f"Durasi: {film_info['durasi']} menit")
-        print(f"Sinopsis: {film_info['sinopsis']}")
-        print(f"Teater: {film_info['teater']}")
-        print(f"Harga: Rp {film_info['harga_tiket']}")
-        print(f"Jadwal: {', '.join(film_info['jadwal'])}")
+        print(f"\nInformasi Film {film_title}:")
+        print(f"Genre: {film_info.get('genre')}")
+        print(f"Durasi: {film_info.get('durasi')}")
+        print(f"Rating: {film_info.get('rating')}")
+        print(f"Teater: {film_info.get('teater')}")
+        print(f"Harga: Rp {film_info.get('harga_tiket')}")
+
+        # Menampilkan jadwal film
+        print(f"\nJadwal Film {film_title}:")
+        for jadwal in film_service.get_film_schedule(film_title):
+            print(f"- {jadwal}")

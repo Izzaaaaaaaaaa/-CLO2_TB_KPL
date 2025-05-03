@@ -129,30 +129,22 @@ def get_film_price(
     }
 
 
-@app.get("/teater/{teater_name}/seats", tags=["Kursi"])
-def get_seats_status(teater_name: str):
+@app.get("/seats/{teater_name}", tags=["Kursi"])
+def get_available_seats(teater_name: str):
     """
-    Mendapatkan status kursi untuk teater tertentu
+    Mendapatkan daftar kursi yang tersedia untuk teater tertentu
     """
-    if teater_name not in seat_manager.seat_status:
-        raise HTTPException(status_code=404, detail=f"Teater '{teater_name}' tidak ditemukan")
+    available_seats = seat_manager.get_available_seats(teater_name)
+    if not available_seats and teater_name in seat_manager.seat_status:
+        return {"message": f"Tidak ada kursi tersedia di {teater_name}", "seats": []}
 
-    # Dapatkan layout kursi
-    layout = seat_manager.get_seat_layout(teater_name)
-
-    # Dapatkan status kursi
-    status = []
-    for i, is_available in enumerate(seat_manager.seat_status[teater_name]):
-        seat_code = seat_manager.get_seat_code(i)
-        status.append({
-            "seat": seat_code,
-            "is_available": is_available
-        })
+    # Konversi indeks kursi ke nama kursi (A1, B2, dll)
+    seat_names = [seat_manager.get_seat_name(seat_idx) for seat_idx in available_seats]
 
     return {
         "teater": teater_name,
-        "layout": layout,
-        "seats": status
+        "available_count": len(available_seats),
+        "seats": seat_names
     }
 
 
@@ -222,5 +214,5 @@ def reserve_seats(reservation: SeatReservation):
 
 
 # Menjalankan aplikasi dengan Uvicorn jika file ini dijalankan langsung
-if _name_ == "_main_":
+if __name__ == "_main_":
     uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)
