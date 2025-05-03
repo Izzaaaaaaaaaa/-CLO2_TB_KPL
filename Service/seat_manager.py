@@ -48,6 +48,11 @@ class SeatManager:
     # ===================== PENAMAAN KURSI =====================
 
     def get_seat_name(self, nomor_kursi: int) -> str:
+        try:
+            nomor_kursi = int(nomor_kursi)
+        except (ValueError, TypeError):
+            return "Invalid"
+
         huruf_baris = chr(65 + (nomor_kursi // 10))  # 65 = 'A'
         nomor = (nomor_kursi % 10) + 1
         return f"{huruf_baris}{nomor}"

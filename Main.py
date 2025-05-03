@@ -142,7 +142,7 @@ def main():
                 continue
 
             # Alokasi kursi
-            kursi = seat_manager.assign_seats(teater, jumlah_tiket)
+            kursi = seat_manager.assign_seat(teater, jumlah_tiket)
             if not kursi:
                 print("❌ Gagal mengalokasikan kursi.")
                 continue
