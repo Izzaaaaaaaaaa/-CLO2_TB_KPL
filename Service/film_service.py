@@ -1,6 +1,8 @@
 import requests
 from typing import Dict, List, Optional, Any
 from Config.Config_manager import ConfigManager
+from entities import Film
+from data_manager import DataManager
 
 
 class FilmService:
@@ -149,30 +151,43 @@ class FilmService:
         schedule = self.get_film_schedule(film_title)
         return time in schedule
 
+film_manager = DataManager[Film]()  # ← DI SINILAH GENERIC DIGUNAKAN
 
-# Contoh penggunaan mandiri
-if __name__ == '__main__':
-    config = ConfigManager()
-    config.load_config()
-    film_service = FilmService(config)
+def seed_film_data():
+    film_manager.tambah(Film(...))
+    # Tambahkan data dari file JSON di sini jika perlu
 
-    # Menampilkan semua film
-    print("Daftar Film:")
-    for film in film_service.get_all_films():
-        print(f"- {film.get('judul')}")
+def get_film_info():
+    return film_manager.ambil_semua()
 
-    # Mencari informasi film tertentu
-    film_title = "Avengers: Endgame"
-    film_info = film_service.get_film_info(film_title)
-    if film_info:
-        print(f"\nInformasi Film {film_title}:")
-        print(f"Genre: {film_info.get('genre')}")
-        print(f"Durasi: {film_info.get('durasi')}")
-        print(f"Rating: {film_info.get('rating')}")
-        print(f"Teater: {film_info.get('teater')}")
-        print(f"Harga: Rp {film_info.get('harga_tiket')}")
+def get_film_schedule(judul: str):
+    film_list = film_manager.cari('judul', judul)
+    return film_list[0].jadwal if film_list else None
 
-        # Menampilkan jadwal film
-        print(f"\nJadwal Film {film_title}:")
-        for jadwal in film_service.get_film_schedule(film_title):
-            print(f"- {jadwal}")
+
+# # Contoh penggunaan mandiri
+# if __name__ == '__main__':
+#     config = ConfigManager()
+#     config.load_config()
+#     film_service = FilmService(config)
+
+#     # Menampilkan semua film
+#     print("Daftar Film:")
+#     for film in film_service.get_all_films():
+#         print(f"- {film.get('judul')}")
+
+#     # Mencari informasi film tertentu
+#     film_title = "Avengers: Endgame"
+#     film_info = film_service.get_film_info(film_title)
+#     if film_info:
+#         print(f"\nInformasi Film {film_title}:")
+#         print(f"Genre: {film_info.get('genre')}")
+#         print(f"Durasi: {film_info.get('durasi')}")
+#         print(f"Rating: {film_info.get('rating')}")
+#         print(f"Teater: {film_info.get('teater')}")
+#         print(f"Harga: Rp {film_info.get('harga_tiket')}")
+
+#         # Menampilkan jadwal film
+#         print(f"\nJadwal Film {film_title}:")
+#         for jadwal in film_service.get_film_schedule(film_title):
+#             print(f"- {jadwal}")

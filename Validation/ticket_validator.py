@@ -5,12 +5,15 @@
 
 from typing import Dict, List, Optional
 from Config.Config_manager import ConfigManager
-
+from Service.film_service import get_film_schedule
 
 class TicketValidator:
     """
     Kelas untuk melakukan validasi terhadap tiket dan input pengguna.
     """
+    def validate_ticket(judul: str, jam: str):
+        jadwal = get_film_schedule(judul)
+        return jam in jadwal if jadwal else False
 
     def __init__(self, config_manager: ConfigManager):
         self.config_manager = config_manager
@@ -119,16 +122,16 @@ class TicketValidator:
         return {"valid": True, "message": "✅ Tiket valid untuk diproses.", "teater": teater}
 
 
-# Contoh Penggunaan Mandiri
-if __name__ == "__main__":
-    config = ConfigManager()
-    validator = TicketValidator(config)
+# # Contoh Penggunaan Mandiri
+# if __name__ == "__main__":
+#     config = ConfigManager()
+#     validator = TicketValidator(config)
 
-    film = "Avengers: Endgame"
-    jam = "13:00"
-    jumlah = 2
+#     film = "Avengers: Endgame"
+#     jam = "13:00"
+#     jumlah = 2
 
-    hasil = validator.validate_ticket_request(film, jam, jumlah)
-    print(hasil["message"])
-    if hasil["valid"]:
-        print(f"🎟️ Film: {film} | Jam: {jam} | Teater: {hasil['teater']} | Jumlah: {jumlah}")
+#     hasil = validator.validate_ticket_request(film, jam, jumlah)
+#     print(hasil["message"])
+#     if hasil["valid"]:
+#         print(f"🎟️ Film: {film} | Jam: {jam} | Teater: {hasil['teater']} | Jumlah: {jumlah}")
