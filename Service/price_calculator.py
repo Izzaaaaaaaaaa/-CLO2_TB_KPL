@@ -32,12 +32,6 @@ class PriceCalculator:
         self.film_prices = self._build_film_price_table()
 
     def _build_film_price_table(self) -> Dict[str, int]:
-        """
-        Membangun tabel harga film dari konfigurasi
-
-        Returns:
-            Dictionary dengan judul film sebagai kunci dan harga dasar sebagai nilai
-        """
         film_prices = {}
         films = self.config_manager.config.get("film", [])
 
@@ -49,15 +43,7 @@ class PriceCalculator:
         return film_prices
 
     def get_base_price(self, film_title: str) -> int:
-        """
-        Mendapatkan harga dasar untuk film tertentu
 
-        Args:
-            film_title: Judul film
-
-        Returns:
-            Harga dasar film
-        """
         return self.film_prices.get(film_title, 0)
 
     def get_price(self, film_title: str, jam_tayang: str, is_holiday: bool = False, is_member: bool = False) -> Dict[
@@ -77,7 +63,7 @@ class PriceCalculator:
         # Mendapatkan harga dasar
         base_price = self.get_base_price(film_title)
 
-        # Menghitung diskon berdasarkan waktu
+
         waktu_diskon_persen = self.config_manager.get_diskon_by_jam(jam_tayang)
         waktu_diskon_nominal = (base_price * waktu_diskon_persen) // 100
 
