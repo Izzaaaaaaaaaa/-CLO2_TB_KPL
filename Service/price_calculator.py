@@ -122,39 +122,3 @@ class PriceCalculator:
         }
 
         return result
-
-
-# Contoh penggunaan mandiri
-if __name__ == '__main__':
-    config = ConfigManager()
-    config.load_config()
-    calculator = PriceCalculator(config)
-
-    # Contoh perhitungan harga
-    film_title = "Avengers: Endgame"
-    jam_tayang = "19:00"
-
-    # Harga normal (bukan hari libur, bukan member)
-    normal_price = calculator.get_price(film_title, jam_tayang)
-    print(f"Harga normal untuk {film_title} jam {jam_tayang}:")
-    print(f"Harga dasar: Rp {normal_price['harga_dasar']}")
-    print(f"Diskon waktu: {normal_price['diskon_waktu']['persen']}% (Rp {normal_price['diskon_waktu']['nominal']})")
-    print(f"Total diskon: Rp {normal_price['total_diskon']}")
-    print(f"Biaya admin: Rp {normal_price['biaya_admin']}")
-    print(f"Total harga: Rp {normal_price['total_harga']}")
-    print(f"Total (API): Rp {normal_price['total']}")
-
-    # Harga dengan semua diskon (hari libur dan member)
-    all_discount_price = calculator.get_price(film_title, jam_tayang, True, True)
-    print(f"\nHarga dengan semua diskon untuk {film_title} jam {jam_tayang}:")
-    print(f"Harga dasar: Rp {all_discount_price['harga_dasar']}")
-    print(
-        f"Diskon waktu: {all_discount_price['diskon_waktu']['persen']}% (Rp {all_discount_price['diskon_waktu']['nominal']})")
-    print(
-        f"Diskon libur: {all_discount_price['diskon_libur']['persen']}% (Rp {all_discount_price['diskon_libur']['nominal']})")
-    print(
-        f"Diskon member: {all_discount_price['diskon_member']['persen']}% (Rp {all_discount_price['diskon_member']['nominal']})")
-    print(f"Total diskon: Rp {all_discount_price['total_diskon']}")
-    print(f"Biaya admin: Rp {all_discount_price['biaya_admin']}")
-    print(f"Total harga: Rp {all_discount_price['total_harga']}")
-    print(f"Total (API): Rp {all_discount_price['total']}")
