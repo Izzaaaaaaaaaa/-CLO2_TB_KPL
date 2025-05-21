@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JurnalModul_7_Kelompok 7", "JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7.csproj", "{E24E1B17-0EC6-4798-82F3-64135ED276BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E24E1B17-0EC6-4798-82F3-64135ED276BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E24E1B17-0EC6-4798-82F3-64135ED276BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E24E1B17-0EC6-4798-82F3-64135ED276BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E24E1B17-0EC6-4798-82F3-64135ED276BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3ED206BE-2821-42EA-8F90-F4ADD740A50B}
+	EndGlobalSection
+EndGlobal

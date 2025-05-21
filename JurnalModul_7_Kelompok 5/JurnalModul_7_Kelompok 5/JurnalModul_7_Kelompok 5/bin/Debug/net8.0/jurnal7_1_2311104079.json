@@ -1,0 +1,47 @@
+{
+   "firstName": "Pradana",
+   "lastName": "Argo Pangestu",
+   "gender": "male",
+   "age": 21,
+   "address": {
+       "streetAddress": "Jalan Cendrawasih No 741",
+       "city": "Purwokerto",
+       "state": "Jawa Tengah"
+   },
+  "courses": [
+    {
+      "code": "YIS",
+      "name": "Konstruksi Perangkat Lunak"
+    },
+
+    {
+      "code": "AAH",
+      "name": "Arsitektur dan Desain Perangkat Lunak"
+    },
+
+    {
+      "code": "MSA",
+      "name": "Basis Data"
+    },
+
+    {
+      "code": "GFA",
+      "name": "Interaksi Manusia Komputer"
+    },
+
+    {
+      "code": "RAD",
+      "name": "Pemodelan Perangkat Lunak"
+    },
+
+    {
+      "code": "ADI",
+      "name": "Proyek Tingkat II"
+    },
+
+    {
+      "code": "GFA",
+      "name": "Rekayasa Kebutuhan Perangkat Lunak"
+    }
+  ]
+}

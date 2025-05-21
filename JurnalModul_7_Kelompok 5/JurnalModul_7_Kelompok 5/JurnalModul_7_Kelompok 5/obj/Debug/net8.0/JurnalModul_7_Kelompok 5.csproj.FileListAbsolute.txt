@@ -1,0 +1,29 @@
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.GeneratedMSBuildEditorConfig.editorconfig
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.AssemblyInfoInputs.cache
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.AssemblyInfo.cs
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.csproj.CoreCompileInputs.cache
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.sourcelink.json
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.exe
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.deps.json
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.runtimeconfig.json
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.dll
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.pdb
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.dll
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\refint\JurnalModul_7_Kelompok 7.dll
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.pdb
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.genruntimeconfig.cache
+D:\Repo Praktikum Kpl\07_Grammar-Based_Input_Processing_Parsing\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\ref\JurnalModul_7_Kelompok 7.dll
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.exe
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.deps.json
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.runtimeconfig.json
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.dll
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\bin\Debug\net8.0\JurnalModul_7_Kelompok 7.pdb
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.GeneratedMSBuildEditorConfig.editorconfig
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.AssemblyInfoInputs.cache
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.AssemblyInfo.cs
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.csproj.CoreCompileInputs.cache
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.dll
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\refint\JurnalModul_7_Kelompok 7.dll
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.pdb
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\JurnalModul_7_Kelompok 7.genruntimeconfig.cache
+C:\TUGAS\KPL\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\JurnalModul_7_Kelompok 7\obj\Debug\net8.0\ref\JurnalModul_7_Kelompok 7.dll

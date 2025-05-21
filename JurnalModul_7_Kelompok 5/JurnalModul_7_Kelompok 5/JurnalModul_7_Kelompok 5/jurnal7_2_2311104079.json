@@ -1,0 +1,39 @@
+{
+  "members" : [
+    {
+       "firstName": "Pradana",
+       "lastName": "Argo Pangestu",
+       "gender": "Male",
+       "age": 21,
+       "nim": "2311104079"
+    },
+    {
+      "firstName": "Izzaty zahara ",
+      "lastName": "Br Barus",
+      "gender": "Female",
+      "age": 20,
+      "nim": "2311104052"
+    },
+    {
+      "firstName": "Rizaldy",
+      "lastName": "Aulia Rachman",
+      "gender": "Male",
+      "age": 20,
+      "nim": "2311104051"
+    },
+    {
+      "firstName": "Haza",
+      "lastName": "Zaidan Zidna Fann",
+      "gender": "Male",
+      "age": 20,
+      "nim": "2311104056"
+    },
+    {
+      "firstName": "Jauhar",
+      "lastName": "Fajar Zuhair",
+      "gender": "Male",
+      "age": 20,
+      "nim": "2311104072"
+    }
+  ]
+}
