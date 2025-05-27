@@ -75,7 +75,7 @@ def get_film_showtimes(title: str):
     """
     Mendapatkan jadwal tayang untuk film tertentu
     """
-    showtimes = film_service.get_film_showtimes(title)
+    showtimes = film_service.get_film_schedule(title)
     if not showtimes:
         raise HTTPException(status_code=404, detail=f"Jadwal untuk film '{title}' tidak ditemukan")
     return showtimes
