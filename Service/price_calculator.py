@@ -46,7 +46,7 @@ class PriceCalculator:
 
         return self.film_prices.get(film_title, 0)
 
-    def get_price(self, film_title: str, jam_tayang: str, is_holiday: bool = False, is_member: bool = False) -> Dict[
+    def get_price(self, film_title: str, jam_tayang: str, is_holiday: bool = False, is_member: bool = False,jumlah_tiket: int = 1) -> Dict[
         str, Any]:
         """
         Menghitung harga tiket berdasarkan berbagai parameter
@@ -79,8 +79,10 @@ class PriceCalculator:
         # Menghitung harga setelah diskon
         price_after_discount = base_price - total_diskon
 
+        price_per_ticket = price_after_discount + self.biaya_admin
+
         # Menghitung total harga dengan biaya admin
-        total_price = price_after_discount + self.biaya_admin
+        total_price = price_per_ticket * jumlah_tiket
 
         # Menyusun hasil perhitungan dalam bentuk dictionary
         result = {
@@ -102,6 +104,8 @@ class PriceCalculator:
             "total_diskon": total_diskon,
             "harga_setelah_diskon": price_after_discount,
             "biaya_admin": self.biaya_admin,
+            "harga_per_tiket": price_per_ticket,
+            "jumlah_tiket": jumlah_tiket,
             "total_harga": total_price,
             # Tambahkan kunci "total" untuk kompatibilitas dengan API
             "total": total_price
