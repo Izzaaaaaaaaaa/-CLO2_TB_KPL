@@ -151,9 +151,6 @@ def get_available_seats(teater_name: str):
 
 @app.post("/reservation", tags=["Reservasi"])
 def reserve_seats(reservation: SeatReservation):
-    """
-    Memesan tiket untuk film tertentu
-    """
     # Validasi film
     film = film_service.get_film_info(reservation.film_title)
     if not film:
@@ -164,8 +161,8 @@ def reserve_seats(reservation: SeatReservation):
         raise HTTPException(status_code=400, detail=f"Jadwal '{reservation.showtime}' tidak valid")
 
     # Mendapatkan teater untuk film ini
-    teater_name = film_service.get_film_teater(reservation.film_title)
-    if not teater_name:
+    theater_name = film_service.get_film_teater(reservation.film_title)
+    if not theater_name:
         raise HTTPException(status_code=404, detail=f"Teater untuk film '{reservation.film_title}' tidak ditemukan")
 
     # Validasi dan reservasi kursi
@@ -174,38 +171,37 @@ def reserve_seats(reservation: SeatReservation):
         if seat_index == -1:
             raise HTTPException(status_code=400, detail=f"Format kursi '{seat}' tidak valid")
 
-        if seat_index >= len(seat_manager.seat_status[teater_name]) or not seat_manager.seat_status[teater_name][
-            seat_index]:
+        if seat_index >= len(seat_manager.seat_status[theater_name]) or not seat_manager.seat_status[theater_name][seat_index]:
             raise HTTPException(status_code=400, detail=f"Kursi '{seat}' tidak tersedia")
 
     # Menandai kursi sebagai tidak tersedia
     for seat in reservation.seats:
         seat_index = seat_manager.get_seat_index(seat)
-        seat_manager.seat_status[teater_name][seat_index] = False
+        seat_manager.seat_status[theater_name][seat_index] = False
 
-    # Hitung harga
+    # Hitung harga dengan jumlah tiket
     price_info = price_calculator.get_price(
         reservation.film_title,
         reservation.showtime,
         reservation.is_holiday,
-        reservation.is_member
+        reservation.is_member,
+        len(reservation.seats)  # Mengirim jumlah tiket
     )
 
     if not price_info:
         raise HTTPException(status_code=404,
-                            detail=f"Informasi harga untuk film '{reservation.film_title}' tidak ditemukan")
+                           detail=f"Informasi harga untuk film '{reservation.film_title}' tidak ditemukan")
 
-    # Pastikan kunci "total" ada dalam price_info
-    price_per_ticket = price_info.get("total_harga", price_info.get("total", 0))
-    total_price = price_per_ticket * len(reservation.seats)
+    # Menggunakan harga total yang sudah dihitung dengan jumlah tiket
+    total_price = price_info.get("total_harga", price_info.get("total", 0))
 
     return {
         "film": reservation.film_title,
         "showtime": reservation.showtime,
-        "teater": teater_name,
+        "teater": theater_name,
         "seats": reservation.seats,
         "price_info": {
-            "price_per_ticket": price_per_ticket,
+            "price_per_ticket": price_info.get("harga_per_tiket", 0),
             "total_seats": len(reservation.seats)
         },
         "total": total_price,
