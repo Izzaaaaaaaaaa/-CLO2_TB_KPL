@@ -27,38 +27,59 @@ def show_film_list(facade):
         print(f"- {film.judul} | Genre: {film.genre} | Teater: {film.teater} | Harga: Rp{film.harga_tiket}")
 
 def search_film_by_genre(facade):
-    genre = input("Masukkan genre: ").strip().lower()
-    results = facade.get_films(genre=genre)
-    if results:
-        print(f"\n🎬 Film dengan genre '{genre}':")
-        for film in results:
-            print(f"- {film.judul}")
-    else:
-        print(f"⚠️ Tidak ada film dengan genre '{genre}'.")
+    while True:
+        genre = input("Masukkan genre: ").strip().lower()
+        if not genre:
+            print("⚠️ Genre tidak boleh kosong. Silakan coba lagi.")
+            continue
+
+        results = facade.get_films(genre=genre)
+        if results:
+            print(f"\n🎬 Film dengan genre '{genre}':")
+            for film in results:
+                print(f"- {film.judul}")
+        else:
+            print(f"⚠️ Tidak ada film dengan genre '{genre}'.")
+        break  # keluar dari loop setelah satu pencarian berhasil (ditemukan atau tidak)
+
 
 def show_film_schedule(facade):
-    title = input("Masukkan judul film: ").strip()
-    result = facade.get_film_detail(title)
-    if result["success"]:
-        film = result["film"]
-        print(f"\n🕒 Jadwal tayang untuk {film.judul}: {', '.join(film.jadwal)}")
-    else:
-        print(f"⚠️ {result['message']}")
+    while True:
+        title = input("Masukkan judul film: ").strip()
+        if not title:
+            print("⚠️ Judul film tidak boleh kosong. Silakan coba lagi.")
+            continue
+
+        result = facade.get_film_detail(title)
+        if result["success"]:
+            film = result["film"]
+            print(f"\n🕒 Jadwal tayang untuk {film.judul}: {', '.join(film.jadwal)}")
+        else:
+            print(f"⚠️ {result['message']}")
+        break
+
 
 def show_film_info(facade):
-    title = input("Masukkan judul film: ").strip()
-    result = facade.get_film_detail(title)
-    if result["success"]:
-        film = result["film"]
-        print(f"\n📋 Informasi lengkap film '{film.judul}':")
-        print(f"Genre  : {film.genre}")
-        print(f"Durasi : {film.durasi}")
-        print(f"Rating : {film.rating}")
-        print(f"Teater : {film.teater}")
-        print(f"Jadwal : {', '.join(film.jadwal)}")
-        print(f"Harga  : Rp{film.harga_tiket}")
-    else:
-        print(f"⚠️ {result['message']}")
+    while True:
+        title = input("Masukkan judul film: ").strip()
+        if not title:
+            print("⚠️ Judul film tidak boleh kosong. Silakan coba lagi.")
+            continue
+
+        result = facade.get_film_detail(title)
+        if result["success"]:
+            film = result["film"]
+            print(f"\n📋 Informasi lengkap film '{film.judul}':")
+            print(f"Genre  : {film.genre}")
+            print(f"Durasi : {film.durasi}")
+            print(f"Rating : {film.rating}")
+            print(f"Teater : {film.teater}")
+            print(f"Jadwal : {', '.join(film.jadwal)}")
+            print(f"Harga  : Rp{film.harga_tiket}")
+        else:
+            print(f"⚠️ {result['message']}")
+        break
+
 
 def check_seat_availability(facade):
     choice = input("Cek berdasarkan teater (1) atau film (2)? ")
