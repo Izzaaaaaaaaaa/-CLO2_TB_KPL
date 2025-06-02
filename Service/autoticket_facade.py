@@ -216,8 +216,8 @@ class AutoTicketFacade:
             return price_result
 
         # 5. Hasilkan nomor reservasi unik
-        import random
-        reservation_id = f"RES-{random.randint(1000, 9999)}"
+        import secrets
+        reservation_id = f"RES-{secrets.randbelow(9000) + 1000}"
 
         # 6. Menggabungkan semua informasi untuk hasil akhir
         return {
