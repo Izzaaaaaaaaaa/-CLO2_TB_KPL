@@ -82,13 +82,24 @@ def show_film_info(facade):
 
 
 def check_seat_availability(facade):
-    choice = input("Cek berdasarkan teater (1) atau film (2)? ")
+    choice = input("Cek berdasarkan teater (1) atau film (2)? ").strip()
+
+    if choice not in ["1", "2"]:
+        print("⚠️ Pilihan tidak valid. Harap masukkan angka 1 untuk teater atau 2 untuk film.")
+        return
 
     if choice == "1":
         theater = input("Masukkan nama teater: ").strip()
+        if not theater:
+            print("⚠️ Nama teater tidak boleh kosong.")
+            return
         result = facade.check_seats(theater_name=theater)
-    else:
+
+    elif choice == "2":
         film = input("Masukkan judul film: ").strip()
+        if not film:
+            print("⚠️ Judul film tidak boleh kosong.")
+            return
         result = facade.check_seats(film_title=film)
 
     if result["success"]:
@@ -97,11 +108,38 @@ def check_seat_availability(facade):
     else:
         print(f"⚠️ {result['message']}")
 
+
 def book_ticket(facade):
     try:
         title = input("Judul film: ").strip()
+        if not title:
+            print("⚠️ Judul film tidak boleh kosong.")
+            return
+
+        # 🔍 Tampilkan jadwal otomatis saat input judul
+        result = facade.get_film_detail(title)
+        if result["success"]:
+            film = result["film"]
+            print(f"🕒 Jadwal tayang untuk {film.judul}: {', '.join(film.jadwal)}")
+        else:
+            print(f"⚠️ {result['message']}")
+            return
+
         showtime = input("Jam tayang (HH:MM): ").strip()
-        ticket_count = int(input("Jumlah tiket: "))
+        if not showtime:
+            print("⚠️ Jam tayang tidak boleh kosong.")
+            return
+
+        ticket_input = input("Jumlah tiket: ").strip()
+        if not ticket_input:
+            print("⚠️ Jumlah tiket tidak boleh kosong.")
+            return
+        if not ticket_input.isdigit():
+            print("⚠️ Jumlah tiket harus angka.")
+            return
+
+        ticket_count = int(ticket_input)
+
         is_holiday = input("Hari libur? (y/n): ").strip().lower() == 'y'
         is_member = input("Member? (y/n): ").strip().lower() == 'y'
         seat_pref = input("Preferensi kursi (berurutan/bebas): ").strip().lower()
@@ -125,8 +163,6 @@ def book_ticket(facade):
         else:
             print(f"⚠️ {result['message']}")
 
-    except ValueError:
-        print("⚠️ Jumlah tiket harus angka.")
     except Exception as e:
         print(f"⚠️ Terjadi kesalahan: {str(e)}")
 
