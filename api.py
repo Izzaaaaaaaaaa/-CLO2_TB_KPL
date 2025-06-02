@@ -186,8 +186,8 @@ def reserve_specific_seats(reservation: SeatReservation):
         facade.cancel_booking(film.teater, reservation.seats)
         raise HTTPException(status_code=404, detail=price_result["message"])
 
-    import random
-    reservation_id = f"RES-{random.randint(1000, 9999)}"
+    import secrets
+    reservation_id = f"RES-{secrets.randbelow(9000) + 1000}"
 
     return {
         "reservation_id": reservation_id,
