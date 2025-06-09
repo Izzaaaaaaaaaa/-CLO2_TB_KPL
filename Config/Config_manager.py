@@ -6,12 +6,17 @@
 import json
 import os
 from typing import Dict, Any
+from env_loader import get_env
 
 class ConfigManager:
-    def __init__(self, config_path: str = 'config.json'):
+    def __init__(self, config_path: str = None):
         """
-        Inisialisasi ConfigManager dengan path default ke config.json
+        Inisialisasi ConfigManager dengan path dari environment variable atau default
         """
+        # Gunakan path dari environment variable jika tidak ada yang diberikan
+        if config_path is None:
+            config_path = get_env("CONFIG_PATH", "config.json")
+            
         self.config_path = config_path
         self.config: Dict[str, Any] = {}
 
@@ -73,14 +78,3 @@ class ConfigManager:
 
     def get_biaya_admin(self) -> int:
         return self.get_tiket_config().get("HARGA_ADMIN", 0)
-
-
-# # Contoh penggunaan mandiri
-# if __name__ == '__main__':
-#     config = ConfigManager()
-#     data = config.load_config()
-#     print("📌 Nama Bioskop:", config.get_bioskop_info().get("nama"))
-#     print("💺 Max Kursi:", config.get_max_kursi())
-#     print("🎉 Diskon Libur:", config.get_diskon_libur(), "%")
-#     print("🕒 Diskon Malam:", config.get_diskon_by_jam("20:00"), "%")
-#     print("💸 Biaya Admin:", config.get_biaya_admin())

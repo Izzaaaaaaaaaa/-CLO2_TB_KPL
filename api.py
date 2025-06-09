@@ -3,9 +3,18 @@ from pydantic import BaseModel
 from typing import List
 import uvicorn
 from Service.autoticket_facade import AutoTicketFacade
+from env_loader import get_env
 
-app = FastAPI(title="AutoTicket API", description="API untuk sistem pemesanan tiket bioskop")
-facade = AutoTicketFacade()  # Satu facade untuk semua endpoint
+# Gunakan environment variable untuk menginisialisasi FastAPI
+app = FastAPI(
+    title="AutoTicket API",
+    description="API untuk sistem pemesanan tiket bioskop",
+    version=get_env("API_VERSION", "1.0.0")
+)
+
+# Inisialisasi facade menggunakan environment variable untuk config path
+facade = AutoTicketFacade()  # Internally uses CONFIG_PATH from env
+
 class SeatReservation(BaseModel):
     film_title: str
     showtime: str
@@ -26,7 +35,7 @@ def read_root():
     """
     Endpoint root untuk informasi API
     """
-    return {"message": "Selamat datang di AutoTicket API", "version": "1.0.0"}
+    return {"message": "Selamat datang di AutoTicket API", "version": get_env("API_VERSION", "1.0.0")}
 
 @app.get("/films", tags=["Film"])
 def get_films(genre: str = None):
@@ -198,6 +207,3 @@ def reserve_specific_seats(reservation: SeatReservation):
         "price": price_result["total"],
         "status": "confirmed"
     }
-# Menjalankan aplikasi dengan Uvicorn jika file ini dijalankan langsung
-if __name__ == "__main__":
-    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)

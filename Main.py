@@ -4,6 +4,8 @@ import webbrowser
 import uvicorn
 from Service.autoticket_facade import AutoTicketFacade
 from api import app
+from env_loader import get_env
+
 def display_menu():
     print("\n🎉 Selamat datang di AutoTicket CLI 🎟️")
     print("Silakan pilih menu berikut:")
@@ -17,9 +19,14 @@ def display_menu():
     print("8. Keluar")
 
 def run_api_server():
-    print("\n🚀 Memulai server API di http://localhost:8000")
-    webbrowser.open('http://localhost:8000/docs')
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    # Menggunakan variabel lingkungan dari .env
+    api_host = get_env("API_HOST", "127.0.0.1")
+    api_port = int(get_env("API_PORT", "8000"))
+    api_docs_url = get_env("API_DOCS_URL", "http://localhost:8000/docs")
+    
+    print(f"\n🚀 Memulai server API di http://{api_host}:{api_port}")
+    webbrowser.open(api_docs_url)
+    uvicorn.run(app, host=api_host, port=api_port)
 
 def show_film_list(facade):
     print("\n🎞 Daftar Film:")

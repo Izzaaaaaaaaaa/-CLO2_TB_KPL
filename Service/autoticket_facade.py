@@ -5,6 +5,7 @@ from Service.seat_manager import SeatManager
 from Validation.ticket_validator import TicketValidator
 from entities import Film
 from data_manager import DataManager
+from env_loader import get_env
 
 class AutoTicketFacade:
     """
@@ -16,7 +17,11 @@ class AutoTicketFacade:
     - Mengelola interaksi antar subsistem
     - Menyembunyikan kompleksitas implementasi
     """
-    def __init__(self, config_path: str = 'config.json'):
+    def __init__(self, config_path: str = None):
+        # Jika config_path tidak diberikan, gunakan dari environment variable
+        if config_path is None:
+            config_path = get_env("CONFIG_PATH", "config.json")
+            
         # Inisialisasi konfigurasi - Subsistem 1
         self._config = ConfigManager(config_path)
         self._config.load_config()
