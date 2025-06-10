@@ -2,16 +2,11 @@ import os
 import threading
 import webbrowser
 import uvicorn
-from Config.Config_manager import ConfigManager
-from Service.price_calculator import PriceCalculator
-from Service.seat_manager import SeatManager
-from Validation.ticket_validator import TicketValidator
+from Service.autoticket_facade import AutoTicketFacade
 from api import app
-from entities import Film
-from data_manager import DataManager
+from env_loader import get_env
 
-# Fungsi untuk menampilkan menu CLI
-def tampilkan_menu():
+def display_menu():
     print("\n🎉 Selamat datang di AutoTicket CLI 🎟️")
     print("Silakan pilih menu berikut:")
     print("1. Lihat daftar film")
@@ -23,284 +18,193 @@ def tampilkan_menu():
     print("7. Jalankan API (Web Mode)")
     print("8. Keluar")
 
-# Fungsi untuk menjalankan server FastAPI di thread terpisah
 def run_api_server():
-    print("\n🚀 Memulai server API di http://localhost:8000")
-    webbrowser.open('http://localhost:8000/docs')
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    # Menggunakan variabel lingkungan dari .env
+    api_host = get_env("API_HOST", "127.0.0.1")
+    api_port = int(get_env("API_PORT", "8000"))
+    api_docs_url = get_env("API_DOCS_URL", "http://localhost:8000/docs")
+    
+    print(f"\n🚀 Memulai server API di http://{api_host}:{api_port}")
+    webbrowser.open(api_docs_url)
+    uvicorn.run(app, host=api_host, port=api_port)
 
-def main():
-    # Load konfigurasi
-    config = ConfigManager()
-    config.load_config()
+def show_film_list(facade):
+    print("\n🎞 Daftar Film:")
+    for film in facade.get_films():
+        print(f"- {film.judul} | Genre: {film.genre} | Teater: {film.teater} | Harga: Rp{film.harga_tiket}")
 
-    # Load data film
-    film_data = config.config.get("film", [])
-    film_manager = DataManager[Film]()
-    for f in film_data:
-        film_manager.tambah(Film(**f))
-
-    seat_manager = SeatManager(config)
-    calculator = PriceCalculator(config)
-    validator = TicketValidator(config)
-
+def search_film_by_genre(facade):
     while True:
-        tampilkan_menu()
-        pilihan = input("Masukkan pilihan Anda (1-8): ").strip()
+        genre = input("Masukkan genre: ").strip().lower()
+        if not genre:
+            print("⚠️ Genre tidak boleh kosong. Silakan coba lagi.")
+            continue
 
-        if pilihan == '1':
-            print("\n🎞 Daftar Film:")
-            for film in film_manager.ambil_semua():
-                print(f"- {film.judul} | Genre: {film.genre} | Teater: {film.teater} | Harga: Rp{film.harga_tiket}")
-
-        elif pilihan == '2':
-            genre = input("Masukkan genre: ").strip().lower()
-            hasil = [f for f in film_manager.ambil_semua() if genre in f.genre.lower()]
-            if hasil:
-                print(f"\n🎬 Film dengan genre '{genre}':")
-                for film in hasil:
-                    print(f"- {film.judul}")
-            else:
-                print(f"⚠️ Tidak ada film dengan genre '{genre}'.")
-
-        elif pilihan == '3':
-            judul = input("Masukkan judul film: ").strip()
-            film = film_manager.cari("judul", judul)
-            if film:
-                print(f"\n🕒 Jadwal tayang untuk {judul}: {', '.join(film[0].jadwal)}")
-            else:
-                print(f"⚠️ Tidak ada jadwal untuk film '{judul}'.")
-
-        elif pilihan == '4':
-            judul = input("Masukkan judul film: ").strip()
-            film = film_manager.cari("judul", judul)
-            if film:
-                f = film[0]
-                print(f"\n📋 Informasi lengkap film '{f.judul}':")
-                print(f"Genre  : {f.genre}")
-                print(f"Durasi : {f.durasi}")
-                print(f"Rating : {f.rating}")
-                print(f"Teater : {f.teater}")
-                print(f"Jadwal : {', '.join(f.jadwal)}")
-                print(f"Harga  : Rp{f.harga_tiket}")
-            else:
-                print(f"⚠️ Film '{judul}' tidak ditemukan.")
-
-        elif pilihan == '5':
-            teater = input("Masukkan nama teater: ").strip()
-            if teater in seat_manager.seat_status:
-                total = seat_manager.get_total_available_seats(teater)
-                if total > 0:
-                    seats = seat_manager.get_available_seats(teater)
-                    print(f"\n💺 Kursi tersedia: {total}")
-                    print("Contoh:", ', '.join(seat_manager.get_seat_name(i) for i in seats[:10]))
-                else:
-                    print("⚠️ Tidak ada kursi tersedia.")
-            else:
-                print(f"⚠️ Teater '{teater}' tidak ditemukan.")
-
-        elif pilihan == '6':
-            judul = input("Judul film: ").strip()
-            jam = input("Jam tayang (HH:MM): ").strip()
-            try:
-                jumlah = int(input("Jumlah tiket: "))
-            except ValueError:
-                print("⚠️ Jumlah tiket harus angka.")
-                continue
-            is_libur = input("Hari libur? (y/n): ").strip().lower() == 'y'
-            is_member = input("Member? (y/n): ").strip().lower() == 'y'
-
-            film = film_manager.cari("judul", judul)
-            if not film:
-                print(f"⚠️ Film '{judul}' tidak ditemukan.")
-                continue
-
-            if jam not in film[0].jadwal:
-                print(f"⚠️ Jadwal '{jam}' tidak tersedia.")
-                continue
-
-            teater = film[0].teater
-            if seat_manager.get_total_available_seats(teater) < jumlah:
-                print("⚠️ Kursi tidak cukup.")
-                continue
-
-            kursi = seat_manager.assign_seat(teater, jumlah)
-            if not kursi:
-                print("⚠️ Gagal mengalokasikan kursi.")
-                continue
-
-            harga = calculator.get_price(judul, jam, is_libur, is_member)
-
-            print("\n✅ Tiket berhasil dipesan!")
-            print(f"🎬 Film   : {judul}")
-            print(f"🕒 Jam    : {jam}")
-            print(f"🏢 Teater : {teater}")
-            print(f"💺 Kursi  : {', '.join(kursi)}")
-            print(f"💰 Total  : Rp{harga['total_harga']}")
-
-        elif pilihan == '7':
-            print("\n🌐 Mode Web (Swagger) sedang berjalan...")
-            api_thread = threading.Thread(target=run_api_server, daemon=True)
-            api_thread.start()
-            input("🔙 Tekan Enter untuk kembali ke menu CLI...")
-
-        elif pilihan == '8':
-            print("\n🙏 Terima kasih telah menggunakan AutoTicket. Sampai jumpa di pemesanan berikutnya!")
-            break
-
+        results = facade.get_films(genre=genre)
+        if results:
+            print(f"\n🎬 Film dengan genre '{genre}':")
+            for film in results:
+                print(f"- {film.judul}")
         else:
-            print("⚠️ Pilihan tidak valid. Silakan pilih antara 1 hingga 8.")
+            print(f"⚠️ Tidak ada film dengan genre '{genre}'.")
+        break  # keluar dari loop setelah satu pencarian berhasil (ditemukan atau tidak)
 
-if __name__ == "__main__":
-    main()
-import os
-import threading
-import webbrowser
-import uvicorn
-from Config.Config_manager import ConfigManager
-from Service.price_calculator import PriceCalculator
-from Service.seat_manager import SeatManager
-from Validation.ticket_validator import TicketValidator
-from api import app
-from entities import Film
-from data_manager import DataManager
 
-def display_menu():
-    print("\n Selamat datang di AutoTicket CLI ")
-    print("Silakan pilih menu berikut:")
-    print("1. Lihat daftar film")
-    print("2. Cari film berdasarkan genre")
-    print("3. Lihat jadwal film")
-    print("4. Lihat informasi film lengkap")
-    print("5. Cek ketersediaan kursi")
-    print("6. Pesan tiket")
-    print("7. Jalankan API (Web Mode)")
-    print("8. Keluar")
+def show_film_schedule(facade):
+    while True:
+        title = input("Masukkan judul film: ").strip()
+        if not title:
+            print("⚠️ Judul film tidak boleh kosong. Silakan coba lagi.")
+            continue
 
-def run_api_server():
-    print("\n Memulai server API di http://localhost:8000")
-    webbrowser.open('http://localhost:8000/docs')
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+        result = facade.get_film_detail(title)
+        if result["success"]:
+            film = result["film"]
+            print(f"\n🕒 Jadwal tayang untuk {film.judul}: {', '.join(film.jadwal)}")
+        else:
+            print(f"⚠️ {result['message']}")
+        break
+
+
+def show_film_info(facade):
+    while True:
+        title = input("Masukkan judul film: ").strip()
+        if not title:
+            print("⚠️ Judul film tidak boleh kosong. Silakan coba lagi.")
+            continue
+
+        result = facade.get_film_detail(title)
+        if result["success"]:
+            film = result["film"]
+            print(f"\n📋 Informasi lengkap film '{film.judul}':")
+            print(f"Genre  : {film.genre}")
+            print(f"Durasi : {film.durasi}")
+            print(f"Rating : {film.rating}")
+            print(f"Teater : {film.teater}")
+            print(f"Jadwal : {', '.join(film.jadwal)}")
+            print(f"Harga  : Rp{film.harga_tiket}")
+        else:
+            print(f"⚠️ {result['message']}")
+        break
+
+
+def check_seat_availability(facade):
+    choice = input("Cek berdasarkan teater (1) atau film (2)? ").strip()
+
+    if choice not in ["1", "2"]:
+        print("⚠️ Pilihan tidak valid. Harap masukkan angka 1 untuk teater atau 2 untuk film.")
+        return
+
+    if choice == "1":
+        theater = input("Masukkan nama teater: ").strip()
+        if not theater:
+            print("⚠️ Nama teater tidak boleh kosong.")
+            return
+        result = facade.check_seats(theater_name=theater)
+
+    elif choice == "2":
+        film = input("Masukkan judul film: ").strip()
+        if not film:
+            print("⚠️ Judul film tidak boleh kosong.")
+            return
+        result = facade.check_seats(film_title=film)
+
+    if result["success"]:
+        print(f"\n💺 Kursi tersedia di {result['teater']}: {result['total']}")
+        print("Contoh kursi:", ', '.join(result['contoh_kursi']))
+    else:
+        print(f"⚠️ {result['message']}")
+
+
+def book_ticket(facade):
+    try:
+        title = input("Judul film: ").strip()
+        if not title:
+            print("⚠️ Judul film tidak boleh kosong.")
+            return
+
+        # 🔍 Tampilkan jadwal otomatis saat input judul
+        result = facade.get_film_detail(title)
+        if result["success"]:
+            film = result["film"]
+            print(f"🕒 Jadwal tayang untuk {film.judul}: {', '.join(film.jadwal)}")
+        else:
+            print(f"⚠️ {result['message']}")
+            return
+
+        showtime = input("Jam tayang (HH:MM): ").strip()
+        if not showtime:
+            print("⚠️ Jam tayang tidak boleh kosong.")
+            return
+
+        ticket_input = input("Jumlah tiket: ").strip()
+        if not ticket_input:
+            print("⚠️ Jumlah tiket tidak boleh kosong.")
+            return
+        if not ticket_input.isdigit():
+            print("⚠️ Jumlah tiket harus angka.")
+            return
+
+        ticket_count = int(ticket_input)
+
+        is_holiday = input("Hari libur? (y/n): ").strip().lower() == 'y'
+        is_member = input("Member? (y/n): ").strip().lower() == 'y'
+        seat_pref = input("Preferensi kursi (berurutan/bebas): ").strip().lower()
+
+        if seat_pref not in ["berurutan", "bebas"]:
+            seat_pref = "berurutan"  # Default jika input tidak valid
+
+        # Gunakan metode terpadu dari facade
+        result = facade.book_tickets(
+            title, showtime, ticket_count, is_holiday, is_member, seat_pref
+        )
+
+        if result["success"]:
+            print("\n✅ Tiket berhasil dipesan!")
+            print(f"🎫 ID Reservasi: {result['reservation_id']}")
+            print(f"🎬 Film   : {result['film']}")
+            print(f"🕒 Jam    : {result['jadwal']}")
+            print(f"🏢 Teater : {result['teater']}")
+            print(f"💺 Kursi  : {', '.join(result['kursi'])}")
+            print(f"💰 Total  : Rp{result['harga']}")
+        else:
+            print(f"⚠️ {result['message']}")
+
+    except Exception as e:
+        print(f"⚠️ Terjadi kesalahan: {str(e)}")
+
+def run_api():
+    print("\n🌐 Mode Web (Swagger) sedang berjalan...")
+    api_thread = threading.Thread(target=run_api_server, daemon=True)
+    api_thread.start()
+    input("🔙 Tekan Enter untuk kembali ke menu CLI...")
 
 def main():
-    config = ConfigManager()
-    config.load_config()
-
-    film_data = config.config.get("film", [])
-    film_manager = DataManager[Film]()
-    for f in film_data:
-        film_manager.tambah(Film(**f))
-
-    seat_manager = SeatManager(config)
-    calculator = PriceCalculator(config)
-    validator = TicketValidator(config)
+    # Inisialisasi facade - satu-satunya titik kontak dengan sistem
+    facade = AutoTicketFacade()
 
     while True:
         display_menu()
         choice = input("Masukkan pilihan Anda (1-8): ").strip()
 
-        if choice == '1':
-            print("\n Daftar Film:")
-            for film in film_manager.ambil_semua():
-                print(f"- {film.judul} | Genre: {film.genre} | Teater: {film.teater} | Harga: Rp{film.harga_tiket}")
+        menu_handlers = {
+            '1': lambda: show_film_list(facade),
+            '2': lambda: search_film_by_genre(facade),
+            '3': lambda: show_film_schedule(facade),
+            '4': lambda: show_film_info(facade),
+            '5': lambda: check_seat_availability(facade),
+            '6': lambda: book_ticket(facade),
+            '7': run_api,
+            '8': lambda: print("\n🙏 Terima kasih telah menggunakan AutoTicket. Sampai jumpa di pemesanan berikutnya!")
+        }
 
-        elif choice == '2':
-            genre = input("Masukkan genre: ").strip().lower()
-            hasil = [f for f in film_manager.ambil_semua() if genre in f.genre.lower()]
-            if hasil:
-                print(f"\n Film dengan genre '{genre}':")
-                for film in hasil:
-                    print(f"- {film.judul}")
-            else:
-                print(f" Tidak ada film dengan genre '{genre}'.")
-
-        elif choice == '3':
-            judul = input("Masukkan judul film: ").strip()
-            film = film_manager.cari("judul", judul)
-            if film:
-                print(f"\n Jadwal tayang untuk {judul}: {', '.join(film[0].jadwal)}")
-            else:
-                print(f" Tidak ada jadwal untuk film '{judul}'.")
-
-        elif choice == '4':
-            judul = input("Masukkan judul film: ").strip()
-            film = film_manager.cari("judul", judul)
-            if film:
-                f = film[0]
-                print(f"\n Informasi lengkap film '{f.judul}':")
-                print(f"Genre  : {f.genre}")
-                print(f"Durasi : {f.durasi}")
-                print(f"Rating : {f.rating}")
-                print(f"Teater : {f.teater}")
-                print(f"Jadwal : {', '.join(f.jadwal)}")
-                print(f"Harga  : Rp{f.harga_tiket}")
-            else:
-                print(f" Film '{judul}' tidak ditemukan.")
-
-        elif choice == '5':
-            teater = input("Masukkan nama teater: ").strip()
-            if teater in seat_manager.seat_status:
-                total = seat_manager.get_total_available_seats(teater)
-                if total > 0:
-                    seats = seat_manager.get_available_seats(teater)
-                    print(f"\n Kursi tersedia: {total}")
-                    print("Contoh:", ', '.join(seat_manager.get_seat_name(i) for i in seats[:10]))
-                else:
-                    print(" Tidak ada kursi tersedia.")
-            else:
-                print(f" Teater '{teater}' tidak ditemukan.")
-
-        elif choice == '6':
-            judul = input("Judul film: ").strip()
-            jam = input("Jam tayang (HH:MM): ").strip()
-            try:
-                jumlah = int(input("Jumlah tiket: "))
-            except ValueError:
-                print(" Jumlah tiket harus angka.")
-                continue
-            is_libur = input("Hari libur? (y/n): ").strip().lower() == 'y'
-            is_member = input("Member? (y/n): ").strip().lower() == 'y'
-
-            film = film_manager.cari("judul", judul)
-            if not film:
-                print(f" Film '{judul}' tidak ditemukan.")
-                continue
-
-            if jam not in film[0].jadwal:
-                print(f" Jadwal '{jam}' tidak tersedia.")
-                continue
-
-            teater = film[0].teater
-            if seat_manager.get_total_available_seats(teater) < jumlah:
-                print(" Kursi tidak cukup.")
-                continue
-
-            kursi = seat_manager.assign_seat(teater, jumlah)
-            if not kursi:
-                print(" Gagal mengalokasikan kursi.")
-                continue
-
-            harga = calculator.get_price(judul, jam, is_libur, is_member)
-
-            print("\n Tiket berhasil dipesan!")
-            print(f" Film   : {judul}")
-            print(f" Jam    : {jam}")
-            print(f" Teater : {teater}")
-            print(f" Kursi  : {', '.join(kursi)}")
-            print(f" Total  : Rp{harga['total_harga']}")
-
-        elif choice == '7':
-            print("\n Mode Web (Swagger) sedang berjalan...")
-            api_thread = threading.Thread(target=run_api_server, daemon=True)
-            api_thread.start()
-            input(" Tekan Enter untuk kembali ke menu CLI...")
-
-        elif choice == '8':
-            print("\n Terima kasih telah menggunakan AutoTicket. Sampai jumpa di pemesanan berikutnya!")
-            break
-
+        if choice in menu_handlers:
+            if choice == '8':
+                menu_handlers[choice]()
+                break
+            menu_handlers[choice]()
         else:
-            print(" Pilihan tidak valid. Silakan pilih antara 1 hingga 8.")
+            print("⚠️ Pilihan tidak valid. Silakan pilih antara 1 hingga 8.")
 
 if __name__ == "__main__":
     main()
