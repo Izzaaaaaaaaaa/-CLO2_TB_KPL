@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from api import app
+from cli.api import app
 from Config.Config_manager import ConfigManager
 from Service.film_service import FilmService
 from Service.price_calculator import PriceCalculator
