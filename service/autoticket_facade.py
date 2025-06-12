@@ -2,7 +2,7 @@ from typing import Dict, List, Any, Optional, Union
 from config.config_manager import ConfigManager
 from service.price_calculator import PriceCalculator
 from service.seat_manager import SeatManager
-from Validation.ticket_validator import TicketValidator
+from validation.ticket_validator import TicketValidator
 from entities import Film
 from data_manager import DataManager
 from env_loader import get_env

@@ -11,7 +11,7 @@ from service.film_service import FilmService
 from service.price_calculator import PriceCalculator
 from service.seat_manager import SeatManager
 from service.autoticket_facade import AutoTicketFacade
-from Validation.ticket_validator import TicketValidator
+from validation.ticket_validator import TicketValidator
 
 class TicketSystemTest(unittest.TestCase):
     @classmethod
