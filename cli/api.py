@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
 import uvicorn
-from Service.autoticket_facade import AutoTicketFacade
+from service.autoticket_facade import AutoTicketFacade
 from env_loader import get_env
 
 # Gunakan environment variable untuk menginisialisasi FastAPI

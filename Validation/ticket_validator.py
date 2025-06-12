@@ -4,8 +4,8 @@
 # File: validation/ticket_validator.py
 
 from typing import Dict, List, Optional
-from Config.Config_manager import ConfigManager
-from Service.film_service import get_film_schedule
+from config.config_manager import ConfigManager
+from service.film_service import get_film_schedule
 
 
 class TicketValidator:

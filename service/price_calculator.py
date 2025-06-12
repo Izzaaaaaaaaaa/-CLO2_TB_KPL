@@ -4,7 +4,7 @@
 # File: price_calculator.py
 
 from typing import Dict, Any
-from Config.Config_manager import ConfigManager
+from config.config_manager import ConfigManager
 
 
 class PriceCalculator:

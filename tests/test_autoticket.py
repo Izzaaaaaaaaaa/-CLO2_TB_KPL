@@ -6,26 +6,26 @@ from fastapi.testclient import TestClient
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from cli.api import app
-from Config.Config_manager import ConfigManager
-from Service.film_service import FilmService
-from Service.price_calculator import PriceCalculator
-from Service.seat_manager import SeatManager
-from Service.autoticket_facade import AutoTicketFacade
+from config.config_manager import ConfigManager
+from service.film_service import FilmService
+from service.price_calculator import PriceCalculator
+from service.seat_manager import SeatManager
+from service.autoticket_facade import AutoTicketFacade
 from Validation.ticket_validator import TicketValidator
 
 class TicketSystemTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.client = TestClient(app)
-        cls.config = ConfigManager("Config.json")
+        cls.config = ConfigManager("config.json")
         cls.config.load_config()
         cls.film_service = FilmService(cls.config)
         cls.calculator = PriceCalculator(cls.config)
         cls.seat_manager = SeatManager(cls.config)
         cls.validator = TicketValidator(cls.config)
-        cls.facade = AutoTicketFacade("Config.json")
+        cls.facade = AutoTicketFacade("config.json")
 
-    # ========== API Endpoint Tests ==========
+    # ========== API Endpoint tests ==========
     def test_root(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
@@ -137,7 +137,7 @@ class TicketSystemTest(unittest.TestCase):
 
         self.assertIn(response.status_code, [400, 404])
 
-    # ========== Service Layer Tests ==========
+    # ========== service Layer tests ==========
     def test_film_service_get_all_films(self):
         films = self.film_service.get_all_films()
         self.assertIsInstance(films, list)
@@ -203,7 +203,7 @@ class TicketSystemTest(unittest.TestCase):
         self.assertTrue(self.validator.is_valid_showtime("Avengers: Endgame", "10:00"))
         self.assertFalse(self.validator.is_valid_showtime("Avengers: Endgame", "00:00"))
 
-    # ========== Facade Tests ==========
+    # ========== Facade tests ==========
     def test_facade_get_films(self):
         films = self.facade.get_films()
         self.assertIsInstance(films, list)

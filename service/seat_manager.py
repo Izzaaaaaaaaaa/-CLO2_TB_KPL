@@ -4,7 +4,7 @@
 # File: seat_manager.py
 
 from typing import Dict, List, Tuple, Optional
-from Config.Config_manager import ConfigManager
+from config.config_manager import ConfigManager
 
 
 class SeatManager:

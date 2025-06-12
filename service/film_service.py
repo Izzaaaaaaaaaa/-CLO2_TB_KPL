@@ -1,6 +1,6 @@
 import requests
 from typing import Dict, List, Optional, Any
-from Config.Config_manager import ConfigManager
+from config.config_manager import ConfigManager
 from entities import Film
 from data_manager import DataManager
 

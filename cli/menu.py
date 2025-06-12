@@ -7,7 +7,7 @@ from cli.actions import (
     book_ticket,
 )
 from cli.api_runner import run_api
-from Service.autoticket_facade import AutoTicketFacade
+from service.autoticket_facade import AutoTicketFacade
 
 def display_menu():
     print("\n🎉 Selamat datang di AutoTicket CLI 🎟️")

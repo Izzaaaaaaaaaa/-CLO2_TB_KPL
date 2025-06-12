@@ -1,7 +1,7 @@
 from typing import Dict, List, Any, Optional, Union
-from Config.Config_manager import ConfigManager
-from Service.price_calculator import PriceCalculator
-from Service.seat_manager import SeatManager
+from config.config_manager import ConfigManager
+from service.price_calculator import PriceCalculator
+from service.seat_manager import SeatManager
 from Validation.ticket_validator import TicketValidator
 from entities import Film
 from data_manager import DataManager
