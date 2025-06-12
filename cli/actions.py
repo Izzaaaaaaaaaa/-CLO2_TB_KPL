@@ -16,7 +16,6 @@ def search_film_by_genre(facade):
     else:
         print(f"⚠️ Tidak ada film dengan genre '{genre}'.")
 
-# Fungsi yang hilang dan perlu ditambahkan
 def show_film_schedule(facade):
     film_title = input("Masukkan judul film: ").strip()
     if not film_title:
