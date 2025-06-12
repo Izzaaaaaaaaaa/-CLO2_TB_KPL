@@ -5,7 +5,7 @@
 
 from typing import Dict, List, Optional
 from config.config_manager import ConfigManager
-from service.film_service import get_film_schedule
+from core.services.film_service import get_film_schedule  
 
 
 class TicketValidator:

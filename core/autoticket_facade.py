@@ -1,11 +1,11 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Dict, List, Any, Optional
 from config.config_manager import ConfigManager
-from service.price_calculator import PriceCalculator
-from service.seat_manager import SeatManager
-from validation.ticket_validator import TicketValidator
-from entities import Film
-from data_manager import DataManager
-from env_loader import get_env
+from core.services.price_calculator import PriceCalculator  # Ubah path service -> core.services
+from core.services.seat_manager import SeatManager  # Ubah path
+from core.validation.ticket_validator import TicketValidator  # Ubah path validation -> core.validators
+from models.entities import Film
+from models.data_manager import DataManager
+from utils.env_loader import get_env
 
 class AutoTicketFacade:
     """
@@ -21,7 +21,7 @@ class AutoTicketFacade:
         # Jika config_path tidak diberikan, gunakan dari environment variable
         if config_path is None:
             config_path = get_env("CONFIG_PATH", "config.json")
-            
+
         # Inisialisasi konfigurasi - Subsistem 1
         self._config = ConfigManager(config_path)
         self._config.load_config()

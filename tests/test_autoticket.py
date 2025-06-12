@@ -5,13 +5,13 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from cli.api import app
+from api.api import app
 from config.config_manager import ConfigManager
-from service.film_service import FilmService
-from service.price_calculator import PriceCalculator
-from service.seat_manager import SeatManager
-from service.autoticket_facade import AutoTicketFacade
-from validation.ticket_validator import TicketValidator
+from core.services.film_service import FilmService
+from core.services.price_calculator import PriceCalculator
+from core.services.seat_manager import SeatManager
+from core.autoticket_facade import AutoTicketFacade
+from core.validation import TicketValidator
 
 class TicketSystemTest(unittest.TestCase):
     @classmethod
@@ -137,7 +137,7 @@ class TicketSystemTest(unittest.TestCase):
 
         self.assertIn(response.status_code, [400, 404])
 
-    # ========== service Layer tests ==========
+    # ========== services Layer tests ==========
     def test_film_service_get_all_films(self):
         films = self.film_service.get_all_films()
         self.assertIsInstance(films, list)

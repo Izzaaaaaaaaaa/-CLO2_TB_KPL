@@ -1,17 +1,15 @@
-import threading
 import webbrowser
 import uvicorn
-from cli.api import app
-from env_loader import get_env
-from cli.config_loader import get_config
+from api.api import app
+from utils.env_loader import get_env
 
 def run_api_server():
     """
     Menjalankan server API dengan konfigurasi dari environment variables
     """
-    api_host = get_config("API_HOST")
-    api_port = int(get_config("API_PORT"))
-    api_docs_url = get_config("API_DOCS_URL")
+    api_host = get_env("API_HOST", "127.0.0.1")
+    api_port = int(get_env("API_PORT", "8000"))
+    api_docs_url = get_env("API_DOCS_URL", "http://localhost:8000/docs")
 
     print(f"\n🚀 Memulai server API di http://{api_host}:{api_port}")
     webbrowser.open(api_docs_url)

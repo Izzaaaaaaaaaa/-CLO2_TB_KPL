@@ -1,3 +1,5 @@
+from api.api_runner import run_api
+from core.autoticket_facade import AutoTicketFacade
 from cli.actions import (
     show_film_list,
     search_film_by_genre,
@@ -6,8 +8,7 @@ from cli.actions import (
     check_seat_availability,
     book_ticket,
 )
-from cli.api_runner import run_api
-from service.autoticket_facade import AutoTicketFacade
+
 
 def display_menu():
     print("\n🎉 Selamat datang di AutoTicket CLI 🎟️")

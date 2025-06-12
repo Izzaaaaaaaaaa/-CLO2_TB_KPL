@@ -6,7 +6,7 @@
 import json
 import os
 from typing import Dict, Any
-from env_loader import get_env
+from utils.env_loader import get_env
 
 class ConfigManager:
     def __init__(self, config_path: str = None):

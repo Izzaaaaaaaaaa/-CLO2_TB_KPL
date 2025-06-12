@@ -2,7 +2,7 @@
 # Script sederhana untuk menampilkan coverage report per file
 
 import coverage
-import unittest
+import unittestf
 
 def print_coverage_report():
     # Inisialisasi coverage
